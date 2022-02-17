@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 from setuptools import setup, find_packages
-from pyobd import __version__
+from PyOBD import __version__
 import io
 from os import path
 
