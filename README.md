@@ -51,7 +51,8 @@ La instalación vía pip aún no está disponible, únicamente desde el reposito
 
 
 # Problemas Conocidos
-Luego de las 2am se reinicia el servidor y cambia la estructura de datos
+*   Luego de las 2am se reinicia el servidor y cambia la estructura de datos.
+*   Luego de las 17 la sección de noticias se desconecta.
 
 # To-do list
 
