@@ -131,6 +131,17 @@ class openBYMAdata():
         df_totales['parentKey'] = df_totales['parentKey'].replace(self.__diction, regex=True)
         return df_totales
 
+    def byma_news(self):
+        data = '{"filter":true,"fromDate":null,"toDate":null,"Content-Type":"application/json"}' ## Parametros de los filtros.
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/byma-ads', headers=self.__headers, data=data)
+        avisos_byma = json.loads(response.text)
+        df = pd.DataFrame(avisos_byma['data'])
+        df.descarga='https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/sba/download/'+df.descarga.astype(str)
+        df.fecha=pd.to_datetime(df.fecha)
+        df.drop(["tipoArchivo"],axis=1,inplace=True)
+        return df
+
+
 
     def __convert_to_numeric_columns(self,df, columns):
         for col in columns:
