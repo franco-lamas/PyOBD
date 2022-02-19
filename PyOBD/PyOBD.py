@@ -113,14 +113,6 @@ class openBYMAdata():
         df = self.__convert_to_numeric_columns(df, self.__numeric_columns)
         return df
 
-
-    def byma_news(self):
-        data = '{"filter":true,"fromDate":null,"toDate":null,"Content-Type":"application/json"}' ## Parametros de los filtros.
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/byma-ads', headers=self.__headers, data=data)
-        avisos_byma = json.loads(response.text)
-        df_avisos = pd.DataFrame(avisos_byma['data'])
-        return df_avisos
-
     def marketResume(self):
         data = '{"Content-Type":"application/json"}'
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/total-negotiated', headers=self.__headers, data=data)
