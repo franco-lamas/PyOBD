@@ -32,7 +32,7 @@ with io.open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name='pyobd',
     version=__version__,
-    description='Fallen Financial Tools - Tools for Argentinian Market ',
+    description='PyOBD - Oen BYMA Data API ',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/franco-lamas/Fallen',
