@@ -15,6 +15,10 @@ Por el momento solo se encuentra disponible el plazo de 48hs que viene cargado p
 
     PyOBD.get_bonds()
 
+### Cotizaciones de Letras
+
+    PyOBD.get_short_term_bonds()
+
 ### Cotizaciones de Bonos Coporativos
     PyOBD.get_corporateBonds()
 
@@ -26,9 +30,17 @@ Por el momento solo se encuentra disponible el plazo de 48hs que viene cargado p
 
     PyOBD.get_galpones()
 
+### Cotizaciones de CEDEAR
+
+    PyOBD.get_cedears()
+
 ### Cotizaciones de los índices 
 
     PyOBD.indices()
+    
+### Cotizaciones de opciones
+
+    PyOBD.get_options()
 
 ## Llamadas generales
 ### Noticias
