@@ -85,7 +85,7 @@ class openBYMAdata():
 
     def get_cedears(self):
         data = '{"excludeZeroPxAndQty":false,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/leading-equity', headers=self.__headers, data=data)
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/cedears', headers=self.__headers, data=data)
         panel = json.loads(response.text)
         df= pd.DataFrame(panel['data'])
         df = df[self.__filter_columns].copy()
