@@ -2,6 +2,10 @@ Change Log
 ==========
 0.1.6
 ---
+- Arreglo en panel CEDEAR.
+
+0.1.6
+---
 - Adición del panel de letras.
 - Adición de links de balances y consulta detallada del último.
 - Correción de la función "get_bluechips".
