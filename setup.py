@@ -32,10 +32,10 @@ with io.open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name='pyobd',
     version=__version__,
-    description='PyOBD - Oen BYMA Data API ',
+    description='PyOBD - Open BYMA Data API ',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/franco-lamas/Fallen',
+    url='https://github.com/franco-lamas/PyOBD',
     author='Franco Lamas, Nacho Herrera, St1tch',
     author_email='francomlamas@gmail.com',
     license='GPL V3',
