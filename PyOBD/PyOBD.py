@@ -194,7 +194,7 @@ class openBYMAdata():
             except:
                 error=error+1
         df_bonos_iamc.columns=colList
-        return df_bonos_iamc.drop(["descripcion","notas"],axis=1)
+        return df_bonos_iamc.drop(["notas"],axis=1)
 
 
 
