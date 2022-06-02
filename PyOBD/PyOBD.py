@@ -100,8 +100,8 @@ class openBYMAdata():
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/options', headers=self.__headers, data=data)
         indices = json.loads(response.text)
         df = pd.DataFrame(indices)
-        filter_columns=["symbol","quantityBid","bidPrice","offerPrice","quantityOffer","settlementPrice","imbalance","openingPrice","tradingHighPrice","tradingLowPrice","previousClosingPrice","volumeAmount","volume","numberOfOrders","tradeHour","underlyingSymbol","maturityDate"]
-        options_columns = ['symbol', 'bid_size', 'bid', 'ask', 'ask_size', 'last', 'change', 'open', 'high', 'low', 'previous_close', 'turnover', 'volume', 'operations', 'datetime', 'underlying_asset','expiration']
+        filter_columns=["symbol","quantityBid","bidPrice","offerPrice","quantityOffer","settlementPrice","closingPrice","imbalance","openingPrice","tradingHighPrice","tradingLowPrice","previousClosingPrice","volumeAmount","volume","numberOfOrders","tradeHour","underlyingSymbol","maturityDate"]
+        options_columns = ['symbol', 'bid_size', 'bid', 'ask', 'ask_size', 'last', 'close' , 'change', 'open', 'high', 'low', 'previous_close', 'turnover', 'volume', 'operations', 'datetime', 'underlying_asset','expiration']
         df = df[filter_columns].copy()
         df.columns = options_columns
         df.expiration=pd.to_datetime(df.expiration)
