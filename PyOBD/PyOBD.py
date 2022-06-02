@@ -180,6 +180,23 @@ class openBYMAdata():
         df.balancesFechaEstadoContable=pd.to_datetime(df.balancesFechaEstadoContable)
         return df
 
+    def iamc_bonds(self):
+        data = '{"page_number":1, "page_size":500, "Content-Type":"application/json"}'
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/seriesHistoricas/iamc/bonos', headers=self.__headers, data=data)
+        bonos_iamc = json.loads(response.text)
+        df_bonos_iamc = pd.DataFrame(bonos_iamc['data'])
+        df_bonos_iamc
+        colList=df_bonos_iamc.columns.values
+        error=0
+        for i in range(len(colList)):
+        try:
+            colList[i]=self.__diction[colList[i]]
+        except:
+            error=error+1
+        df_bonos_iamc.columns=colList
+        return df_bonos_iamc.drop(["descripcion","notas"],axis=1)
+
+
 
     def __convert_to_numeric_columns(self,df, columns):
         for col in columns:
