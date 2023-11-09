@@ -1,5 +1,10 @@
 Change Log
 ==========
+
+0.1.8
+---
+- Adición del panel de futuros.
+
 0.1.7
 ---
 - Adición del bonos IAMC.
