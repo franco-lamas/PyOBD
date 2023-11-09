@@ -147,6 +147,24 @@ class openBYMAdata():
         df.expiration=pd.to_datetime(df.expiration)
         df = self.__convert_to_numeric_columns(df, self.__numeric_columns)
         return df
+    
+    def get_futures(self):
+        data = '{"page_number":1,"excludeZeroPxAndQty":true,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
+        response =  self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/index-future', headers=self.__headers, data=data)
+        panel_futuros = json.loads(response.text)
+        df = pd.DataFrame(panel_futuros['data'])
+
+        filter_columns=["symbol","quantityBid","bidPrice","offerPrice","quantityOffer","settlementPrice","closingPrice","imbalance","openingPrice","tradingHighPrice","tradingLowPrice","previousClosingPrice","volumeAmount","volume","numberOfOrders","tradeHour","maturityDate","openInterest"]
+        options_columns = ['symbol', 'bid_size', 'bid', 'ask', 'ask_size', 'last', 'close' , 'change', 'open', 'high', 'low', 'previous_close', 'turnover', 'volume', 'operations', 'datetime', 'expiration','openInterest']
+        df = df[filter_columns].copy()
+
+        df.columns = options_columns
+        df.expiration=pd.to_datetime(df.expiration)
+        row100=['last','close','open','high','low','previous_close','turnover','volume']
+
+        for i in range(len(row100)):
+            df[row100[i]]=df[row100[i]]*1000
+        return df
 
     def marketResume(self):
         data = '{"Content-Type":"application/json"}'

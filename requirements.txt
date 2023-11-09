@@ -1,9 +1,6 @@
 pandas
 datetime
 requests
-json
-re
 numpy
-io
 urllib3
 pytz
