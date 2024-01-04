@@ -1,12 +1,12 @@
-import requests
 import json
+import datetime
+import requests
 import urllib3
-urllib3.disable_warnings()
+import numpy as np
 import pandas as pd
 from pytz import timezone
-from datetime import datetime
-import datetime
-import numpy as np
+urllib3.disable_warnings()
+
 
 
 
@@ -96,6 +96,7 @@ class openBYMAdata():
 
     
     def get_options(self):
+
         data = '{}'
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/options', headers=self.__headers, data=data)
         indices = json.loads(response.text)
@@ -109,6 +110,7 @@ class openBYMAdata():
 
 
     def get_bonds(self):
+
         data = '{"excludeZeroPxAndQty":true,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/public-bonds', headers=self.__headers, data=data)
         panel = json.loads(response.text)
@@ -213,6 +215,8 @@ class openBYMAdata():
                 error=error+1
         df_bonos_iamc.columns=colList
         return df_bonos_iamc.drop(["notas"],axis=1)
+    
+    
 
 
 

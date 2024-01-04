@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+0.1.9-rc.1
+---
+- Correción en requerimientos.
+
 0.1.8
 ---
 - Adición del panel de futuros.
