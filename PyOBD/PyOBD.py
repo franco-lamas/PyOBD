@@ -7,11 +7,6 @@ import pandas as pd
 from pytz import timezone
 urllib3.disable_warnings()
 
-
-
-
-
-
 class openBYMAdata():
 
     def __init__(self):
@@ -52,75 +47,48 @@ class openBYMAdata():
         loaded= json.loads(response.content)
         return bool(loaded["isWorkingDay"])
 
+    def get_values(self, keys, array):
+        result = []
+        for element in array:
+            json = element
+            subjson = {}
+            for key in keys:
+                if key in json:
+                    subjson[key] = json[key]
+            result.append(subjson)
+        return result
+
     def indices(self):
         data = '{"Content-Type":"application/json"}'
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/index-price', headers=self.__headers, data=data, verify=False)
-        indices = json.loads(response.text)['data']
-        df = pd.DataFrame(indices)
-        df = df[self.__columns_filter].copy()
-        df.columns = self.__index_columns
-        return df
+        return json.loads(response.text)['data']
 
     def get_bluechips(self):
         data = '{"excludeZeroPxAndQty":false,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/leading-equity', headers=self.__headers, data=data)
-        panel_acciones_lideres = json.loads(response.text)
-        df= pd.DataFrame(panel_acciones_lideres['data'])
-        df = df[self.__filter_columns].copy()
-        df.columns = self.__securities_columns
-        df.settlement = df.settlement.apply(lambda x: self.__diction[x] if x in self.__diction else '')
-        df = self.__convert_to_numeric_columns(df, self.__numeric_columns)
-        return df
+        return json.loads(response.text)
 
     def get_galpones(self):
         data = '{"excludeZeroPxAndQty":true,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/general-equity', headers=self.__headers, data=data)
-        panel = json.loads(response.text)
-        df= pd.DataFrame(panel['data'])
-        df = df[self.__filter_columns].copy()
-        df.columns = self.__securities_columns
-        df.settlement = df.settlement.apply(lambda x: self.__diction[x] if x in self.__diction else '')
-        df = self.__convert_to_numeric_columns(df, self.__numeric_columns)
-        return df
+        return json.loads(response.text)
 
     def get_cedears(self):
         data = '{"excludeZeroPxAndQty":false,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/cedears', headers=self.__headers, data=data)
-        panel = json.loads(response.text)
-        df= pd.DataFrame(panel)
-        df = df[self.__filter_columns].copy()
-        df.columns = self.__securities_columns
-        df.settlement = df.settlement.apply(lambda x: self.__diction[x] if x in self.__diction else '')
-        df = self.__convert_to_numeric_columns(df, self.__numeric_columns)
-        return df
-
+        return json.loads(response.text)
     
     def get_options(self):
-
         data = '{}'
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/options', headers=self.__headers, data=data)
-        indices = json.loads(response.text)
-        df = pd.DataFrame(indices)
-        filter_columns=["symbol","quantityBid","bidPrice","offerPrice","quantityOffer","settlementPrice","closingPrice","imbalance","openingPrice","tradingHighPrice","tradingLowPrice","previousClosingPrice","volumeAmount","volume","numberOfOrders","tradeHour","underlyingSymbol","maturityDate"]
-        options_columns = ['symbol', 'bid_size', 'bid', 'ask', 'ask_size', 'last', 'close' , 'change', 'open', 'high', 'low', 'previous_close', 'turnover', 'volume', 'operations', 'datetime', 'underlying_asset','expiration']
-        df = df[filter_columns].copy()
-        df.columns = options_columns
-        df.expiration=pd.to_datetime(df.expiration)
-        return df
+        return json.loads(response.text)
 
-
-    def get_bonds(self):
-
+    def get_bonds(self, columns):
         data = '{"excludeZeroPxAndQty":true,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/public-bonds', headers=self.__headers, data=data)
-        panel = json.loads(response.text)
-        df = pd.DataFrame(panel['data'])
-        df = df[self.__filter_columns_fixedIncome].copy()
-        df.columns = self.__fixedIncome_columns
-        df.settlement = df.settlement.apply(lambda x: self.__diction[x] if x in self.__diction else '')
-        df.expiration=pd.to_datetime(df.expiration)
-        df = self.__convert_to_numeric_columns(df, self.__numeric_columns)
-        return df
+        
+        bonds = json.loads(response.text)['data']
+        return self.get_values(columns, bonds)
 
     def get_short_term_bonds(self):
         data = '{"excludeZeroPxAndQty":true,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
@@ -215,10 +183,6 @@ class openBYMAdata():
                 error=error+1
         df_bonos_iamc.columns=colList
         return df_bonos_iamc.drop(["notas"],axis=1)
-    
-    
-
-
 
     def __convert_to_numeric_columns(self,df, columns):
         for col in columns:
