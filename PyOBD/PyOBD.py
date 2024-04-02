@@ -47,21 +47,6 @@ class openBYMAdata():
         loaded= json.loads(response.content)
         return bool(loaded["isWorkingDay"])
 
-    # Private method: for parse response and get only columns than you want
-    def get_values(self, keys, array):
-        if (keys is None):
-            return array
-        else:
-            result = []
-            for element in array:
-                json = element
-                subjson = {}
-                for key in keys:
-                    if key in json:
-                        subjson[key] = json[key]
-                result.append(subjson)
-            return result
-
     # function: get_indices(self)
     # Each index has:
         # symbol: str
@@ -246,7 +231,6 @@ class openBYMAdata():
         
         bonds = json.loads(response.text)['data']
         return bonds
-        # return self.get_values(columns, bonds)
 
     # function get_short_term_bonds(self)
     # Each short term bond has:
