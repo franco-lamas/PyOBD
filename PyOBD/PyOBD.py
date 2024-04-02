@@ -47,81 +47,311 @@ class openBYMAdata():
         loaded= json.loads(response.content)
         return bool(loaded["isWorkingDay"])
 
+    # Private method: for parse response and get only columns than you want
     def get_values(self, keys, array):
-        result = []
-        for element in array:
-            json = element
-            subjson = {}
-            for key in keys:
-                if key in json:
-                    subjson[key] = json[key]
-            result.append(subjson)
-        return result
+        if (keys is None):
+            return array
+        else:
+            result = []
+            for element in array:
+                json = element
+                subjson = {}
+                for key in keys:
+                    if key in json:
+                        subjson[key] = json[key]
+                result.append(subjson)
+            return result
 
+    # function: get_indices(self)
+    # Each index has:
+        # symbol: str
+        # sourceCode: str
+        # country: str
+        # isRate: bool
+        # minValue: float
+        # highValue: float
+        # price: float
+        # description: str
+        # closingPrice: float
+        # variation: float
     def indices(self):
         data = '{"Content-Type":"application/json"}'
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/index-price', headers=self.__headers, data=data, verify=False)
         return json.loads(response.text)['data']
 
+    # function get_bluechips(self)
+    # Each bluechip has:
+        # tradeVolume: int
+        # symbol: str
+        # imbalance: float
+        # previousSettlementPrice: int
+        # offerPrice: float
+        # vwap: float
+        # numberOfOrders: int
+        # openingPrice: int
+        # securityDesc: str
+        # securitySubType: str
+        # previousClosingPrice: int
+        # settlementType: int
+        # quantityOffer: int
+        # tradingHighPrice: int
+        # denominationCcy: str
+        # bidPrice: int
+        # tradingLowPrice: int
+        # market: str
+        # volumeAmount: int
+        # volume: int
+        # trade: int
+        # securityType: str
+        # closingPrice: int
+        # settlementPrice: float
+        # quantityBid: int
     def get_bluechips(self):
         data = '{"excludeZeroPxAndQty":false,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/leading-equity', headers=self.__headers, data=data)
-        return json.loads(response.text)
+        return json.loads(response.text)['data']
 
+    # function get_galpones(self)
+    # Each galpon has:
+        # tradeVolume: int
+        # symbol: str
+        # imbalance: float
+        # previousSettlementPrice: float
+        # offerPrice: float
+        # vwap: float
+        # numberOfOrders: int
+        # openingPrice: int
+        # securityDesc: str
+        # securitySubType: str
+        # previousClosingPrice: float
+        # settlementType: int
+        # quantityOffer: int
+        # tradingHighPrice: float
+        # denominationCcy: str
+        # bidPrice: int
+        # tradingLowPrice: float
+        # market: str
+        # volumeAmount: float
+        # volume: int
+        # trade: float
+        # securityType: str
+        # closingPrice: float
+        # settlementPrice: float
+        # quantityBid: int
     def get_galpones(self):
         data = '{"excludeZeroPxAndQty":true,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/general-equity', headers=self.__headers, data=data)
-        return json.loads(response.text)
+        return json.loads(response.text)['data']
 
+    # function: get_cedears(self)
+    # Eatch cedear has:
+        # tradeVolume: float
+        # symbol: str
+        # imbalance: float
+        # previousSettlementPrice: float
+        # offerPrice: float
+        # vwap: float
+        # numberOfOrders: int
+        # openingPrice: float
+        # securityDesc: str
+        # securitySubType: str
+        # previousClosingPrice: float
+        # settlementType: int
+        # quantityOffer: float
+        # tradingHighPrice: float
+        # denominationCcy: str
+        # bidPrice: float
+        # tradingLowPrice: float
+        # market: str
+        # volumeAmount: float
+        # volume: float
+        # trade: float
+        # securityType: str
+        # closingPrice: float
+        # settlementPrice: float
+        # quantityBid: float 
     def get_cedears(self):
         data = '{"excludeZeroPxAndQty":false,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/cedears', headers=self.__headers, data=data)
         return json.loads(response.text)
-    
+
+    # function get_options(self)
+    # Each option has:
+        # tradeVolume: float
+        # symbol: str
+        # imbalance: float
+        # previousSettlementPrice: float
+        # offerPrice: float
+        # vwap: float
+        # numberOfOrders: int
+        # openingPrice: float
+        # optionType: str
+        # underlyingSymbol: str
+        # securityDesc: str
+        # securitySubType: str
+        # maturityDate: str
+        # previousClosingPrice: float
+        # settlementType: int
+        # quantityOffer: float
+        # tradingHighPrice: float
+        # denominationCcy: str
+        # bidPrice: float
+        # tradingLowPrice: float
+        # market: str
+        # volumeAmount: float
+        # volume: float
+        # trade: float
+        # daysToMaturity: int
+        # securityType: str
+        # closingPrice: float
+        # settlementPrice: float
+        # quantityBid: float
     def get_options(self):
         data = '{}'
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/options', headers=self.__headers, data=data)
         return json.loads(response.text)
 
-    def get_bonds(self, columns):
+    # function: get_bonds(self)
+    # Each bond has: 
+        # tradeVolume: int
+        # symbol: str
+        # imbalance: float
+        # previousSettlementPrice: int
+        # offerPrice: int
+        # vwap: float
+        # numberOfOrders: int
+        # openingPrice: float
+        # securityDesc: ?
+        # securitySubType: enum (str)
+        # maturityDate: date
+        # previousClosingPrice: float
+        # settlementType: enum (int)
+        # quantityOffer: int
+        # tradingHighPrice: int
+        # denominationCcy: enum (str)
+        # bidPrice: float
+        # tradingLowPrice: int
+        # market: enum (str)
+        # volumeAmount: float
+        # volume: float
+        # trade: int
+        # daysToMaturity: int
+        # securityType: enum (str)
+        # closingPrice: int
+        # settlementPrice: float
+        # quantityBid: int
+    def get_bonds(self):
         data = '{"excludeZeroPxAndQty":true,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/public-bonds', headers=self.__headers, data=data)
         
         bonds = json.loads(response.text)['data']
-        return self.get_values(columns, bonds)
+        return bonds
+        # return self.get_values(columns, bonds)
 
+    # function get_short_term_bonds(self)
+    # Each short term bond has:
+        # tradeVolume: int
+        # symbol: str
+        # imbalance: float
+        # previousSettlementPrice: int
+        # offerPrice: float
+        # vwap: float
+        # numberOfOrders: int
+        # openingPrice: int
+        # securityDesc: str
+        # securitySubType: str
+        # maturityDate: str
+        # previousClosingPrice: int
+        # settlementType: int
+        # quantityOffer: float
+        # tradingHighPrice: int
+        # denominationCcy: str
+        # bidPrice: float
+        # tradingLowPrice: int
+        # market: str
+        # volumeAmount: float
+        # volume: int
+        # trade: float
+        # daysToMaturity: int
+        # securityType: str
+        # closingPrice: float
+        # settlementPrice: float
+        # quantityBid: float
     def get_short_term_bonds(self):
         data = '{"excludeZeroPxAndQty":true,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/lebacs', headers=self.__headers, data=data)
-        panel_letras = json.loads(response.text)
-        df = pd.DataFrame(panel_letras['data'])
-        numeric_columns = ['last', 'open', 'high', 'low', 'volume', 'turnover', 'operations', 'change', 'bid_size', 'bid', 'ask_size', 'ask', 'previous_close']
-        filter_columns_fixedIncome=["symbol","settlementType","quantityBid","bidPrice","offerPrice","quantityOffer","settlementPrice","closingPrice","imbalance","openingPrice","tradingHighPrice","tradingLowPrice","previousClosingPrice","volumeAmount","volume","numberOfOrders","securityType","maturityDate","denominationCcy"]
-        df = df[filter_columns_fixedIncome].copy()
-        fixedIncome_columns = ['symbol', 'settlement', 'bid_size', 'bid', 'ask', 'ask_size', 'last', 'close' ,'change', 'open', 'high', 'low', 'previous_close', 'turnover', 'volume', 'operations', 'group',"expiration","currency"]
-        df.columns = fixedIncome_columns
-        df.settlement = df.settlement.apply(lambda x: self.__diction[x] if x in self.__diction else '')
+        return json.loads(response.text)['data']   
 
-        df.expiration=pd.to_datetime(df.expiration)
-        df = self.__convert_to_numeric_columns(df, numeric_columns)
-        return df      
-
+    # function get_corporateBonds(self)
+    # Each corporateBond has:
+        # tradeVolume: float
+        # symbol: str
+        # imbalance: float
+        # previousSettlementPrice: float
+        # offerPrice: float
+        # vwap: float
+        # numberOfOrders: int
+        # openingPrice: float
+        # securityDesc: str
+        # securitySubType: str
+        # maturityDate: str
+        # previousClosingPrice: float
+        # settlementType: int
+        # quantityOffer: float
+        # tradingHighPrice: float
+        # denominationCcy: str
+        # bidPrice: float
+        # tradingLowPrice: float
+        # market: str
+        # volumeAmount: float
+        # volume: float
+        # trade: float
+        # daysToMaturity: int
+        # securityType: str
+        # closingPrice: float
+        # settlementPrice: float
+        # quantityBid: float 
     def get_corporateBonds(self):
         data = '{"excludeZeroPxAndQty":true,"T2":true,"T1":false,"T0":false,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/negociable-obligations', headers=self.__headers, data=data)
-        panel_ons = json.loads(response.text)
-        df= pd.DataFrame(panel_ons)
-        df = df[self.__filter_columns_fixedIncome].copy()
-        df.columns = self.__fixedIncome_columns
-        df.settlement = df.settlement.apply(lambda x: self.__diction[x] if x in self.__diction else '')
-        df.expiration=pd.to_datetime(df.expiration)
-        df = self.__convert_to_numeric_columns(df, self.__numeric_columns)
-        return df
+        return json.loads(response.text)     
     
+    # function get_futures(self)
+    # Each future has:
+        # tradeVolume: int
+        # symbol: str
+        # imbalance: float
+        # previousSettlementPrice: int
+        # offerPrice: float
+        # vwap: float
+        # numberOfOrders: int
+        # openingPrice: float
+        # underlyingSymbol: str
+        # securityDesc: str
+        # securitySubType: str
+        # maturityDate: str
+        # previousClosingPrice: int
+        # settlementType: int
+        # quantityOffer: float
+        # tradingHighPrice: float
+        # denominationCcy: str
+        # bidPrice: float
+        # tradingLowPrice: float
+        # market: str
+        # volumeAmount: int
+        # volume: int
+        # trade: int
+        # daysToMaturity: int
+        # securityType: str
+        # closingPrice: int
+        # settlementPrice: float
+        # quantityBid: float
     def get_futures(self):
         data = '{"page_number":1,"excludeZeroPxAndQty":true,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response =  self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/index-future', headers=self.__headers, data=data)
+        return json.loads(response.text)['data']
         panel_futuros = json.loads(response.text)
+
         df = pd.DataFrame(panel_futuros['data'])
 
         filter_columns=["symbol","quantityBid","bidPrice","offerPrice","quantityOffer","settlementPrice","closingPrice","imbalance","openingPrice","tradingHighPrice","tradingLowPrice","previousClosingPrice","volumeAmount","volume","numberOfOrders","tradeHour","maturityDate","openInterest"]
