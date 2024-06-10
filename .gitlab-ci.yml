@@ -1,0 +1,13 @@
+stages:          # List of stages for jobs, and their order of execution
+  - build
+
+build-package:
+  stage: deploy
+  image: python:3.8
+  only:
+    - main
+  script:
+    - cat $PYPIRC > /tmp/.pypirc
+    - pip install twine
+    - python setup.py  bdist_wheel
+    - python -m twine upload --config-file /tmp/.pypirc
