@@ -1,3 +1,5 @@
 pyobd.egg-info/
 build/
+dist/
 .devcontainer/
+.pypirc
