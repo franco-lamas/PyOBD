@@ -11,4 +11,16 @@ build-package:
     - pip install twine
     - pip install -r requirements.txt
     - python setup.py  bdist_wheel
+    - python -m twine upload --repository pypi dist/* --config-file /tmp/.pypirc
+
+build-package:
+  stage: build
+  image: python:3.10
+  only:
+    - testing
+  script:
+    - cat $PYPIRC > /tmp/.pypirc
+    - pip install twine
+    - pip install -r requirements.txt
+    - python setup.py  bdist_wheel
     - python -m twine upload --repository testpypi dist/* --config-file /tmp/.pypirc
