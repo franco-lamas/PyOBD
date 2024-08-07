@@ -1,9 +1,11 @@
 Change Log
 ==========
 
-0.1.9-rc.1
+0.1.9
 ---
 - Correción en requerimientos.
+- Correción en panel de bonos Coorporativos
+- Parche en plazos de mercado
 
 0.1.8
 ---
