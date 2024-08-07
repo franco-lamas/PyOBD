@@ -8,11 +8,6 @@ from pytz import timezone
 
 urllib3.disable_warnings()
 
-
-
-
-
-
 class openBYMAdata():
 
     def __init__(self):
@@ -94,7 +89,6 @@ class openBYMAdata():
         df = self.__convert_to_numeric_columns(df, self.__numeric_columns)
         return df
 
-    
     def get_options(self):
 
         data = '{}'
@@ -107,7 +101,6 @@ class openBYMAdata():
         df.columns = options_columns
         df.expiration=pd.to_datetime(df.expiration)
         return df
-
 
     def get_bonds(self):
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/public-bonds', headers=self.__headers, data=self.__data)
@@ -210,9 +203,6 @@ class openBYMAdata():
                 error=error+1
         df_bonos_iamc.columns=colList
         return df_bonos_iamc.drop(["notas"],axis=1)
-    
-    
-
 
 
     def __convert_to_numeric_columns(self,df, columns):
