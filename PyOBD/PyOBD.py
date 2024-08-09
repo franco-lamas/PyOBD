@@ -45,11 +45,11 @@ class openBYMAdata:
         self.__diction = response.json()
 
     def isworkingDay(self) -> bool:
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/market-time', headers=self.__headers)
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/market-time', headers=self.__headers, verify=False)
         return response.json().get("isWorkingDay", False)
 
     def indices(self) -> pd.DataFrame:
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/index-price', headers=self.__headers)
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/index-price', headers=self.__headers, verify=False)
         df = pd.DataFrame(response.json().get('data', []))
         df = df[self.__columns_filter].copy()
         df.columns = self.__index_columns
@@ -65,7 +65,7 @@ class openBYMAdata:
         return self.__get_securities('cedears')
 
     def get_options(self) -> pd.DataFrame:
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/options', headers=self.__headers)
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/options', headers=self.__headers, verify=False)
         df = pd.DataFrame(response.json().get('data', []))
         df = df[[
             "symbol", "quantityBid", "bidPrice", "offerPrice", "quantityOffer", "settlementPrice",
@@ -91,7 +91,8 @@ class openBYMAdata:
 
     def get_corporateBonds(self) -> pd.DataFrame:
         return self.__get_fixed_income('negociable-obligations')
-
+    """
+    Función anulada, BYMA restringio el acesso a la información de Futuros.
     def get_futures(self) -> pd.DataFrame:
         data = '{"page_number":1,"excludeZeroPxAndQty":true,"Content-Type":"application/json"}' ## excluir especies sin precio y cantidad, determina plazo de listado
         response =  self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/index-future', headers=self.__headers, data=data, verify=False)
@@ -105,13 +106,15 @@ class openBYMAdata:
         df.columns = options_columns
         df.expiration=pd.to_datetime(df.expiration)
         row100=['last','close','open','high','low','previous_close','turnover','volume']
+    
 
         for i in range(len(row100)):
             df[row100[i]]=df[row100[i]]*1000
         return df
+    """    
 
     def marketResume(self) -> pd.DataFrame:
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/total-negotiated', headers=self.__headers)
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/total-negotiated', headers=self.__headers, verify=False)
         df = pd.DataFrame(response.json())
         df['symbol'] = df['symbol'].replace(self.__diction, regex=True)
         df['assetType'] = df['assetType'].replace(self.__diction, regex=True)
@@ -119,7 +122,7 @@ class openBYMAdata:
         return df
 
     def byma_news(self) -> pd.DataFrame:
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/byma-ads', headers=self.__headers)
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/byma-ads', headers=self.__headers, verify=False)
         df = pd.DataFrame(response.json().get('data', []))
         df['descarga'] = 'https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/sba/download/' + df['descarga'].astype(str)
         df['fecha'] = pd.to_datetime(df['fecha'])
@@ -128,7 +131,7 @@ class openBYMAdata:
 
     def income_statement(self, ticker: str) -> pd.DataFrame:
         data = json.dumps({"symbol": ticker, "Content-Type": "application/json"})
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/seriesHistoricas/balances', headers=self.__headers, data=data)
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/seriesHistoricas/balances', headers=self.__headers, data=data, verify=False)
         df = pd.DataFrame(response.json().get('data', []))
         df['balancesArchivo'] = 'https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/sba/download/' + df['balancesArchivo'].astype(str)
         df['fecha'] = pd.to_datetime(df['fecha'])
@@ -136,14 +139,14 @@ class openBYMAdata:
 
     def dividends(self, ticker: str) -> pd.DataFrame:
         data = json.dumps({"symbol": ticker, "Content-Type": "application/json"})
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/seriesHistoricas/dividendos', headers=self.__headers, data=data)
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/seriesHistoricas/dividendos', headers=self.__headers, data=data, verify=False)
         df = pd.DataFrame(response.json().get('data', []))
         df['fecha'] = pd.to_datetime(df['fecha'])
         return df
 
     def historical_prices(self, ticker: str) -> pd.DataFrame:
         data = json.dumps({"symbol": ticker, "Content-Type": "application/json"})
-        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/seriesHistoricas/prices', headers=self.__headers, data=data)
+        response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/bnown/seriesHistoricas/prices', headers=self.__headers, data=data, verify=False)
         df = pd.DataFrame(response.json().get('data', []))
         df['fecha'] = pd.to_datetime(df['fecha'])
         return df
