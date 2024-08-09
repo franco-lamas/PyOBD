@@ -11,7 +11,7 @@
 # limitations under the License.
 #
 
-__version__ = '0.2.0-rc1.1'
+__version__ = '0.2.0-rc2'
 __author__ = 'Franco Lamas, Nacho Herrera'
 
 from .PyOBD import *
