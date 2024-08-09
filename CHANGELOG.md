@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-0.2.0-rc1-fix1
+0.2.0-rc1.1
 ---
 - Pequeña corereción en codigo.
 
