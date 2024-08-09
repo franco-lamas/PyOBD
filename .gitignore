@@ -3,3 +3,4 @@ build/
 dist/
 .devcontainer/
 .pypirc
+__pycache__/
