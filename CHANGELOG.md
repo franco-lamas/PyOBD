@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+0.2.0-rc3
+---
+- Correción de algunas funciones debido a cambios en BYMA.
+- 
+
 0.2.0-rc2
 ---
 - Pequeña corereción en codigo.
@@ -8,7 +13,6 @@ Change Log
 0.2.0-rc1
 ---
 - Refactorización de codigo.
-- Removido panel de futuros (Open BYMA ya no ofrece esos datos).
 - Se ignora el certificado SSL para las consultas.
 
 0.1.9
