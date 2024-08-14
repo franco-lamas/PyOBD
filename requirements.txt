@@ -1,6 +1,6 @@
-pandas==2.1.4
-datetime
-requests==2.31.0
-numpy==1.26.2
-urllib3==2.1.0
-pytz==2023.3.post1
+numpy==2.0.1
+pandas==2.2.2
+pytz==2024.1
+Requests==2.32.3
+setuptools==69.0.3
+urllib3==2.2.2

@@ -70,8 +70,6 @@ La instalación vía pip aún no está disponible, únicamente desde el reposito
 
 
 *   Agregar más plazos
-*   Formatear links de noticias
-*   Dashboard de bonos IAMC
 *   Datos de empresas
 *   Históricos
 *   Balances históricos
