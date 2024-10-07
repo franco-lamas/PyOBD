@@ -4,3 +4,4 @@ dist/
 .devcontainer/
 .pypirc
 __pycache__/
+test.py

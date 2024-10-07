@@ -89,7 +89,7 @@ class openBYMAdata:
 
     def get_short_term_bonds(self) -> pd.DataFrame:
         df = self.__get_fixed_income('lebacs')
-        df['currency'] = df['denominationCcy']
+        #df['currency'] = df['denominationCcy']
         return df
 
     def get_corporateBonds(self) -> pd.DataFrame:
@@ -151,8 +151,15 @@ class openBYMAdata:
         return df
 
     def __get_fixed_income(self, endpoint: str) -> pd.DataFrame:
+        
         response = self.__s.post(f'https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/{endpoint}', data=self.__data, headers=self.__headers, verify=False)
-        df = pd.DataFrame(response.json())
+        df = pd.DataFrame()
+        if endpoint == "public-bonds" or endpoint == "lebacs" :
+            df = pd.DataFrame(response.json().get('data', []))
+        
+        else:
+            df = pd.DataFrame(response.json())
+
         df = df[self.__filter_columns_fixedIncome].copy()
         df.columns = self.__fixedIncome_columns
         df['expiration'] = pd.to_datetime(df['expiration'])

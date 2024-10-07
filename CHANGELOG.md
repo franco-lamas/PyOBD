@@ -1,10 +1,13 @@
 Change Log
 ==========
 
+0.2.0-rc4
+---
+- Correciones en renta fija.
+
 0.2.0-rc3
 ---
 - Correción de algunas funciones debido a cambios en BYMA.
-- 
 
 0.2.0-rc2
 ---
