@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+0.2.0-rc5
+---
+- Correciones en CEDEARs.
+
 0.2.0-rc4
 ---
 - Correciones en renta fija.

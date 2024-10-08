@@ -141,9 +141,13 @@ class openBYMAdata:
         return df
 
     def __get_securities(self, endpoint: str) -> pd.DataFrame:
-
         response = self.__s.post(f'https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/{endpoint}',data=self.__data, headers=self.__headers, verify=False)
-        df = pd.DataFrame(response.json().get('data', []))
+        df = pd.DataFrame()
+        if endpoint == "cedears":
+            df = pd.DataFrame(response.json())
+        else:
+            df = pd.DataFrame(response.json().get('data', []))
+
         df = df[self.__filter_columns].copy()
         df.columns = self.__securities_columns
         df['datetime'] = pd.to_datetime(df['datetime'])
