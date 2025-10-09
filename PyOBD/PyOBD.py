@@ -51,7 +51,6 @@ class openBYMAdata:
     def indices(self) -> pd.DataFrame:
         data='{"Content-Type":"application/json"}'
         response = self.__s.post('https://open.bymadata.com.ar/vanoms-be-core/rest/api/bymadata/free/index-price', headers=self.__headers, data=data, verify=False)
-        print(response.json())
         df = pd.DataFrame(response.json().get('data', []))
         df = df[self.__columns_filter].copy()
         df.columns = self.__index_columns
