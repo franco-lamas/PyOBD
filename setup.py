@@ -10,7 +10,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="NEST",
-    url="https://gitlab.com/nest/PyOBD",
+    url="https://gitlab.dlnc.duckdns.org/st1tch_bl/pyobd",
     packages=find_packages(exclude=["tests", "scripts", "docs"]),
     install_requires=[
         "requests>=2.28.0",

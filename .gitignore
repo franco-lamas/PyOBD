@@ -25,3 +25,7 @@ Thumbs.db
 
 # Output
 *.csv
+
+# CI/CD artifacts
+coverage.xml
+.cache/

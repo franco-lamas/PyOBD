@@ -1,0 +1,136 @@
+stages:
+  - test
+  - lint
+  - build
+  - deploy
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHON_VERSION: "3.11"
+
+cache:
+  paths:
+    - .cache/pip
+
+default:
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - pip install -e ".[dev]" -q
+
+# ==============================================================================
+# STAGE 1: test
+# ==============================================================================
+
+test:unit:
+  stage: test
+  script:
+    - pytest tests/ -v --cov=pyobd --cov-report=term-missing --cov-report=xml
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+
+# ==============================================================================
+# STAGE 2: lint
+# ==============================================================================
+
+lint:black:
+  stage: lint
+  before_script:
+    - pip install black -q
+  script:
+    - black --check pyobd/ tests/
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+
+lint:flake8:
+  stage: lint
+  before_script:
+    - pip install flake8 -q
+  script:
+    - flake8 pyobd/ tests/ --max-line-length=120 --extend-ignore=E501,W503
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+  allow_failure: true
+
+# ==============================================================================
+# STAGE 3: build
+# ==============================================================================
+
+build:package:
+  stage: build
+  before_script:
+    - pip install build wheel setuptools twine -q
+  script:
+    - python -m build
+    - ls -lh dist/
+    - twine check dist/*
+    - echo "✅ Package built and validated"
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 month
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+
+# ==============================================================================
+# STAGE 4: deploy
+# ==============================================================================
+
+deploy:gitlab-registry:
+  stage: deploy
+  before_script:
+    - pip install twine -q
+  script:
+    - echo "Publishing to GitLab Package Registry..."
+    - >
+      TWINE_PASSWORD=${CI_JOB_TOKEN}
+      TWINE_USERNAME=gitlab-ci-token
+      python -m twine upload
+      --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
+      --non-interactive
+      dist/*
+    - echo "✅ Published → ${CI_PROJECT_URL}/-/packages"
+  needs:
+    - build:package
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+  environment:
+    name: gitlab-registry
+    url: $CI_PROJECT_URL/-/packages
+
+publish-instructions:
+  stage: deploy
+  image: alpine
+  before_script: []
+  script:
+    - |
+      echo "=========================================================="
+      echo "PyOBD publicado exitosamente en GitLab Package Registry"
+      echo "=========================================================="
+      echo ""
+      echo "Para instalar este paquete:"
+      echo ""
+      echo "  pip install PyOBD \\"
+      echo "    --index-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi/simple"
+      echo ""
+      echo "Ver paquetes en: ${CI_PROJECT_URL}/-/packages"
+      echo "=========================================================="
+  needs:
+    - deploy:gitlab-registry
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
