@@ -44,6 +44,4 @@ COMPANY_MGMT = (
     f"{BASE_URL}/vanoms-be-core/rest/api/bymadata/free"
     f"/bnown/fichatecnica/sociedades/administracion"
 )
-COMPANY_BALANCE = (
-    f"{BASE_URL}/vanoms-be-core/rest/api/bymadata/free/bolsar/balances"
-)
+COMPANY_BALANCE = f"{BASE_URL}/vanoms-be-core/rest/api/bymadata/free/bolsar/balances"

@@ -27,25 +27,27 @@ class BymaSession:
         )
 
         # Set required headers (from notebook)
-        self.session.headers.update({
-            "Connection": "keep-alive",
-            "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="96"',
-            "Accept": "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-            "sec-ch-ua-mobile": "?0",
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/96.0.4664.110 Safari/537.36"
-            ),
-            "sec-ch-ua-platform": '"Windows"',
-            "Origin": "https://open.bymadata.com.ar",
-            "Sec-Fetch-Site": "same-origin",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Dest": "empty",
-            "Referer": "https://open.bymadata.com.ar/",
-            "Accept-Language": "es-US,es-419;q=0.9,es;q=0.8,en;q=0.7",
-        })
+        self.session.headers.update(
+            {
+                "Connection": "keep-alive",
+                "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="96"',
+                "Accept": "application/json, text/plain, */*",
+                "Content-Type": "application/json",
+                "sec-ch-ua-mobile": "?0",
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/96.0.4664.110 Safari/537.36"
+                ),
+                "sec-ch-ua-platform": '"Windows"',
+                "Origin": "https://open.bymadata.com.ar",
+                "Sec-Fetch-Site": "same-origin",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Dest": "empty",
+                "Referer": "https://open.bymadata.com.ar/",
+                "Accept-Language": "es-US,es-419;q=0.9,es;q=0.8,en;q=0.7",
+            }
+        )
 
         logger.debug("Session initialized with cookies and headers")
 

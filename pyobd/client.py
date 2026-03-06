@@ -12,7 +12,7 @@ import pandas as pd
 import pytz
 
 from . import endpoints
-from .exceptions import APIError, ValidationError
+from .exceptions import BymaDataError  # noqa: F401  (re-exported)
 from .session import BymaSession
 
 logger = logging.getLogger(__name__)
@@ -74,13 +74,15 @@ class BymaData:
         exclude_zero: bool = False,
     ) -> pd.DataFrame:
         """Get panel acciones líderes (blue chips)."""
-        data = json.dumps({
-            "excludeZeroPxAndQty": exclude_zero,
-            "T2": settlement_t2,
-            "T1": settlement_t1,
-            "T0": settlement_t0,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "excludeZeroPxAndQty": exclude_zero,
+                "T2": settlement_t2,
+                "T1": settlement_t1,
+                "T0": settlement_t0,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.LEADING_EQUITY, data=data)
         return pd.DataFrame(json.loads(response.text)["data"])
 
@@ -104,24 +106,22 @@ class BymaData:
             settlement_t2, settlement_t1, settlement_t0, exclude_zero
         )
 
-    def get_general_board(
-        self, settlement_t2: bool = True
-    ) -> pd.DataFrame:
+    def get_general_board(self, settlement_t2: bool = True) -> pd.DataFrame:
         """Get panel acciones general (general board)."""
-        data = json.dumps({
-            "excludeZeroPxAndQty": False,
-            "T2": settlement_t2,
-            "T1": False,
-            "T0": False,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "excludeZeroPxAndQty": False,
+                "T2": settlement_t2,
+                "T1": False,
+                "T0": False,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.GENERAL_EQUITY, data=data)
         return pd.DataFrame(json.loads(response.text)["data"])
 
     # backward compatibility
-    def get_general_equity(
-        self, settlement_t2: bool = True
-    ) -> pd.DataFrame:
+    def get_general_equity(self, settlement_t2: bool = True) -> pd.DataFrame:
         """Deprecated alias for :meth:`get_general_board`."""
         import warnings
 
@@ -134,13 +134,15 @@ class BymaData:
 
     def get_cedears(self, settlement_t2: bool = True) -> pd.DataFrame:
         """Get CEDEARs panel."""
-        data = json.dumps({
-            "excludeZeroPxAndQty": False,
-            "T2": settlement_t2,
-            "T1": False,
-            "T0": False,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "excludeZeroPxAndQty": False,
+                "T2": settlement_t2,
+                "T1": False,
+                "T0": False,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.CEDEARS, data=data)
         return pd.DataFrame(json.loads(response.text))
 
@@ -163,11 +165,13 @@ class BymaData:
         settlement_map = {"CI": "1", "24HS": "2", "48HS": "3"}
         settlement_type = settlement_map.get(settlement.upper(), settlement)
 
-        data = json.dumps({
-            "symbol": symbol,
-            "settlementType": settlement_type,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "symbol": symbol,
+                "settlementType": settlement_type,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.CURRENT_QUOTE, data=data)
         return pd.DataFrame(json.loads(response.text)["data"])
 
@@ -204,9 +208,7 @@ class BymaData:
             "to": str(to_ts),
         }
 
-        response = self.session.get(
-            endpoints.HISTORICAL_SERIES, params=params
-        )
+        response = self.session.get(endpoints.HISTORICAL_SERIES, params=params)
 
         data = json.loads(response.text)
 
@@ -217,14 +219,16 @@ class BymaData:
                 columns=["date", "open", "high", "low", "close", "volume"]
             )
 
-        df = pd.DataFrame({
-            "date": data["t"],
-            "open": data["o"],
-            "high": data["h"],
-            "low": data["l"],
-            "close": data["c"],
-            "volume": data["v"],
-        })
+        df = pd.DataFrame(
+            {
+                "date": data["t"],
+                "open": data["o"],
+                "high": data["h"],
+                "low": data["l"],
+                "close": data["c"],
+                "volume": data["v"],
+            }
+        )
 
         # Convert timestamp to date object (drop time)
         df["date"] = pd.to_datetime(df["date"], unit="s").dt.date
@@ -286,14 +290,16 @@ class BymaData:
                 columns=["date", "open", "high", "low", "close", "volume"]
             )
 
-        df = pd.DataFrame({
-            "date": data["t"],
-            "open": data["o"],
-            "high": data["h"],
-            "low": data["l"],
-            "close": data["c"],
-            "volume": data["v"],
-        })
+        df = pd.DataFrame(
+            {
+                "date": data["t"],
+                "open": data["o"],
+                "high": data["h"],
+                "low": data["l"],
+                "close": data["c"],
+                "volume": data["v"],
+            }
+        )
 
         df["date"] = pd.to_datetime(df["date"], unit="s")
         df["volume"] = df["volume"].astype(int)
@@ -302,23 +308,21 @@ class BymaData:
 
     # ── Fixed Income ───────────────────────────────────────────────────
 
-    def get_government_bonds(
-        self, settlement_t2: bool = True
-    ) -> pd.DataFrame:
+    def get_government_bonds(self, settlement_t2: bool = True) -> pd.DataFrame:
         """Get títulos públicos (renamed from get_public_bonds)."""
-        data = json.dumps({
-            "T2": settlement_t2,
-            "T1": False,
-            "T0": False,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "T2": settlement_t2,
+                "T1": False,
+                "T0": False,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.PUBLIC_BONDS, data=data)
         return pd.DataFrame(json.loads(response.text)["data"])
 
     # backward compatibility
-    def get_public_bonds(
-        self, settlement_t2: bool = True
-    ) -> pd.DataFrame:
+    def get_public_bonds(self, settlement_t2: bool = True) -> pd.DataFrame:
         """Deprecated alias for :meth:`get_government_bonds`."""
         import warnings
 
@@ -329,29 +333,33 @@ class BymaData:
         )
         return self.get_government_bonds(settlement_t2)
 
-    def get_corporate_bonds(
-        self, settlement_t2: bool = True
-    ) -> pd.DataFrame:
+    def get_corporate_bonds(self, settlement_t2: bool = True) -> pd.DataFrame:
         """Get obligaciones negociables."""
-        data = json.dumps({
-            "excludeZeroPxAndQty": False,
-            "T2": settlement_t2,
-            "T1": False,
-            "T0": False,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "excludeZeroPxAndQty": False,
+                "T2": settlement_t2,
+                "T1": False,
+                "T0": False,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.CORPORATE_BONDS, data=data)
         return pd.DataFrame(json.loads(response.text))
 
-    def get_short_term_government_bonds(self, settlement_t2: bool = True) -> pd.DataFrame:
+    def get_short_term_government_bonds(
+        self, settlement_t2: bool = True
+    ) -> pd.DataFrame:
         """Get letras (short-term government bonds)."""
-        data = json.dumps({
-            "excludeZeroPxAndQty": False,
-            "T2": settlement_t2,
-            "T1": False,
-            "T0": False,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "excludeZeroPxAndQty": False,
+                "T2": settlement_t2,
+                "T1": False,
+                "T0": False,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.LETTERS, data=data)
         return pd.DataFrame(json.loads(response.text)["data"])
 
@@ -381,18 +389,18 @@ class BymaData:
             DataFrame with two columns: 'campo' (field name) and 'valor' (value).
             One row per field.
         """
-        data = json.dumps({
-            "symbol": symbol,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "symbol": symbol,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.COMPANY_GENERAL, data=data)
         result = json.loads(response.text)
         if result.get("data"):
             # Extract the first record and convert to campo/valor format
             record = result["data"][0]
-            df_data = [
-                {"campo": k, "valor": v} for k, v in record.items()
-            ]
+            df_data = [{"campo": k, "valor": v} for k, v in record.items()]
             return pd.DataFrame(df_data)
         return pd.DataFrame(columns=["campo", "valor"])
 
@@ -408,27 +416,29 @@ class BymaData:
             DataFrame with two columns: 'campo' (field name) and 'valor' (value).
             One row per field.
         """
-        data = json.dumps({
-            "symbol": symbol,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "symbol": symbol,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.COMPANY_PROFILE, data=data)
         result = json.loads(response.text)
         if result.get("data"):
             # Extract the first record and convert to campo/valor format
             record = result["data"][0]
-            df_data = [
-                {"campo": k, "valor": v} for k, v in record.items()
-            ]
+            df_data = [{"campo": k, "valor": v} for k, v in record.items()]
             return pd.DataFrame(df_data)
         return pd.DataFrame(columns=["campo", "valor"])
 
     def get_company_management(self, symbol: str) -> pd.DataFrame:
         """Get company management/directors."""
-        data = json.dumps({
-            "symbol": symbol,
-            "Content-Type": "application/json",
-        })
+        data = json.dumps(
+            {
+                "symbol": symbol,
+                "Content-Type": "application/json",
+            }
+        )
         response = self.session.post(endpoints.COMPANY_MGMT, data=data)
         result = json.loads(response.text)
         return pd.DataFrame(result.get("data", []))
@@ -443,9 +453,7 @@ class BymaData:
         """
         params = {"symbol": symbol}
         try:
-            response = self.session.get(
-                endpoints.COMPANY_BALANCE, params=params
-            )
+            response = self.session.get(endpoints.COMPANY_BALANCE, params=params)
         except Exception as exc:
             logger.warning("company_balance unreachable: %s", exc)
             return pd.DataFrame()

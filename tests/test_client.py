@@ -4,10 +4,10 @@ import pandas as pd
 import pytest
 
 from pyobd import BymaData
-from pyobd.exceptions import BymaDataError
 
 
 # ── Initialization ─────────────────────────────────────────────────────
+
 
 class TestClientInit:
     def test_client_creates_session(self, client):
@@ -20,6 +20,7 @@ class TestClientInit:
 
 
 # ── General queries ────────────────────────────────────────────────────
+
 
 class TestGeneralQueries:
     def test_market_time(self, client):
@@ -40,6 +41,7 @@ class TestGeneralQueries:
 
 
 # ── Equity data ────────────────────────────────────────────────────────
+
 
 class TestEquityData:
     def test_bluechips_returns_dataframe(self, client):
@@ -67,11 +69,10 @@ class TestEquityData:
 
 # ── Historical data ───────────────────────────────────────────────────
 
+
 class TestHistoricalData:
     def test_daily_history_with_data(self, client):
-        df = client.get_daily_history(
-            "GGAL 24HS", "2025-06-01", "2025-12-31"
-        )
+        df = client.get_daily_history("GGAL 24HS", "2025-06-01", "2025-12-31")
         assert isinstance(df, pd.DataFrame)
         assert len(df) > 0
         expected_cols = ["date", "open", "high", "low", "close", "volume"]
@@ -79,9 +80,7 @@ class TestHistoricalData:
         assert df["date"].dtype == object
 
     def test_daily_history_no_data(self, client):
-        df = client.get_daily_history(
-            "GGAL 48HS", "2020-01-01", "2020-01-02"
-        )
+        df = client.get_daily_history("GGAL 48HS", "2020-01-01", "2020-01-02")
         assert isinstance(df, pd.DataFrame)
         assert len(df) == 0
         assert "date" in df.columns
@@ -103,6 +102,7 @@ class TestHistoricalData:
 
 # ── Fixed Income ───────────────────────────────────────────────────────
 
+
 class TestFixedIncome:
     def test_government_bonds_returns_dataframe(self, client):
         df = client.get_government_bonds()
@@ -122,6 +122,7 @@ class TestFixedIncome:
 
 
 # ── Company information ───────────────────────────────────────────────
+
 
 class TestCompanyInfo:
     def test_company_info(self, client):
