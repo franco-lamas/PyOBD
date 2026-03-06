@@ -44,7 +44,7 @@ test:unit:
 lint:black:
   stage: lint
   before_script:
-    - pip install black -q
+    - pip install "black==25.1.0" -q
   script:
     - black --check pyobd/ tests/
   rules:
@@ -55,7 +55,7 @@ lint:black:
 lint:flake8:
   stage: lint
   before_script:
-    - pip install flake8 -q
+    - pip install "flake8>=6.0.0,<8.0.0" -q
   script:
     - flake8 pyobd/ tests/ --max-line-length=120 --extend-ignore=E501,W503
   rules:
