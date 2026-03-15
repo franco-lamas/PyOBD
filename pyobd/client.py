@@ -106,14 +106,17 @@ class BymaData:
             settlement_t2, settlement_t1, settlement_t0, exclude_zero
         )
 
-    def get_general_board(self, settlement_t2: bool = True) -> pd.DataFrame:
+    def get_general_board(self, settlement_t2: bool = True,
+        settlement_t1: bool = False,
+        settlement_t0: bool = False,
+        exclude_zero: bool = False,) -> pd.DataFrame:
         """Get panel acciones general (general board)."""
         data = json.dumps(
             {
-                "excludeZeroPxAndQty": False,
+                "excludeZeroPxAndQty": exclude_zero ,
                 "T2": settlement_t2,
-                "T1": False,
-                "T0": False,
+                "T1": settlement_t1,
+                "T0": settlement_t0,
                 "Content-Type": "application/json",
             }
         )
