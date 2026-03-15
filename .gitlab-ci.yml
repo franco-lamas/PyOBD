@@ -35,7 +35,7 @@ test:unit:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "testing"
 
 # ==============================================================================
 # STAGE 2: lint
@@ -50,7 +50,7 @@ lint:black:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "testing"
 
 lint:flake8:
   stage: lint
@@ -61,7 +61,7 @@ lint:flake8:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "testing"
   allow_failure: true
 
 # ==============================================================================
@@ -83,7 +83,7 @@ build:package:
     expire_in: 1 month
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "testing"
 
 # ==============================================================================
 # STAGE 4: deploy
@@ -106,11 +106,27 @@ deploy:gitlab-registry:
   needs:
     - build:package
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "testing"
   environment:
     name: gitlab-registry
     url: $CI_PROJECT_URL/-/packages
+
+publish-to-pypi:
+  stage: deploy
+  before_script:
+    - pip install twine -q
+  script:
+    - echo "Publishing to PyPI..."
+    - python -m twine upload --repository-url "${PYPI_REPOSITORY:-https://upload.pypi.org/legacy/}" \
+        -u "__token__" -p "$PYPI_API_TOKEN" dist/*
+    - echo "✅ Published to PyPI"
+  needs:
+    - build:package
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  environment:
+    name: pypi
+    url: https://pypi.org/project/PyOBD/
 
 publish-instructions:
   stage: deploy
@@ -132,5 +148,4 @@ publish-instructions:
   needs:
     - deploy:gitlab-registry
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "testing"

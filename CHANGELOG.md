@@ -7,7 +7,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ---
 
-## [0.3.0] - 2026-03-15
+## [0.3.0-rc1] - 2026-03-15
 
 ### Agregado
 - Refactorización completa de la librería como paquete Python modular (`pyobd/`)
@@ -25,13 +25,16 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Suite de tests con `pytest` y cobertura de código
 - Formateo de código con `black` y linting con `flake8`
 - Devcontainer para desarrollo reproducible
-- Sistema de tareas batch (`.tasks/`)
-- Scripts de ejemplo y notebook de referencia (`Scrap_byma_data.ipynb`)
 
 ### Cambiado
-- Arquitectura reescrita desde módulo único (`PyOBD.py`) a paquete estructurado
-- Versión de Python requerida elevada a 3.10+
-- Dependencia `pandas` actualizada a >=2.0
+- Rol de las ramas:
+  - `testing` publica en GitLab Package Registry (PyPI interno).
+  - `main` publica en PyPI oficial.
+- Versionado cambiado a `0.3.0-rc1` en `setup.py` y `pyobd/__init__.py`.
+- Se eliminó `.tasks/`, `scripts/Scrap_byma_data.ipynb`, `skills/` y `AGENTS.md` del repositorio (incluyendo la historia de Git)
+- `.env` ahora está en `.gitignore` y no se encuentra en el control de versiones.
+- URL de proyecto cambiada a `https://github.com/franco-lamas/PyOBD`.
+- Autoría ajustada a Franco Lamas (y coautores agregados en metadata).
 
 ### Corregido
 - Correcciones en Panel General (`get_general_board`)
