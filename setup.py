@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="PyOBD",
-    version="0.3.0-rc1",
+    version="0.3.0",
     description="BYMA Market Data Library - Open Data API client",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -28,7 +28,9 @@ setup(
         ],
     },
     python_requires=">=3.10",
+    license="GPLv3",
     classifiers=[
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Financial and Insurance Industry",
         "Programming Language :: Python :: 3",

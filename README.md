@@ -16,6 +16,12 @@ Instalación desde GitHub (última versión en el repositorio):
 pip install "git+https://github.com/franco-lamas/PyOBD.git"
 ```
 
+Install from GitLab Package Registry (replace <GITLAB_URL> and <PROJECT_ID>):
+
+```bash
+pip install --index-url https://<GITLAB_URL>/api/v4/projects/<PROJECT_ID>/packages/pypi/simple PyOBD==0.3.0
+```
+
 ## Uso rápido
 
 ```python
@@ -99,6 +105,11 @@ Las diferencias menores:
 * No se requiere login ni credenciales.
 * Algunos nombres de métodos han cambiado (`get_bluechips` vs `get_leading_equity`, etc.) pero existen alias deprecados.
 
+
+# DISCLAIMER
+
+La información es mostrada “tal cual es”, puede ser incorrecta o contener errores, eso es responsabilidad de cada sitio. No somos responsables por el uso indebido de los Scripts.
+
 ## Licencia
 
-MIT
+GNU General Public License v3 (GPLv3)
