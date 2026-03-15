@@ -5,7 +5,6 @@ import pytest
 
 from pyobd import BymaData
 
-
 # ── Initialization ─────────────────────────────────────────────────────
 
 
