@@ -10,11 +10,10 @@ Compatible con la API de [pyhomebroker](https://github.com/crapher/pyhomebroker)
 pip install PyOBD
 ```
 
-Desde GitLab Package Registry:
+Instalación desde GitHub (última versión en el repositorio):
 
 ```bash
-pip install PyOBD \
-  --index-url https://gitlab.dlnc.duckdns.org/api/v4/projects/st1tch_bl%2Fpyobd/packages/pypi/simple
+pip install "git+https://github.com/franco-lamas/PyOBD.git"
 ```
 
 ## Uso rápido
