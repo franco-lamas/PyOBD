@@ -26,6 +26,11 @@ Thumbs.db
 # Output
 *.csv
 
+# Ignored repository artifacts
+.tasks/
+skills/
+AGENTS.md
+
 # CI/CD artifacts
 coverage.xml
 .cache/
