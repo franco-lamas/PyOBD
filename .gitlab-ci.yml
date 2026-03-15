@@ -117,8 +117,12 @@ publish-to-pypi:
     - pip install twine -q
   script:
     - echo "Publishing to PyPI..."
-    - python -m twine upload --repository-url "${PYPI_REPOSITORY:-https://upload.pypi.org/legacy/}" \
-        -u "__token__" -p "$PYPI_API_TOKEN" dist/*
+    - |
+      if [ -z "$PYPI_API_TOKEN" ]; then
+        echo "ERROR: PYPI_API_TOKEN is not set. Add it in Project > Settings > CI/CD > Variables." >&2
+        exit 1
+      fi
+    - python -m twine upload --non-interactive --repository-url "${PYPI_REPOSITORY:-https://upload.pypi.org/legacy/}" -u "__token__" -p "$PYPI_API_TOKEN" dist/*
     - echo "✅ Published to PyPI"
   needs:
     - build:package
